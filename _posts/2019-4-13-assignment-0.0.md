@@ -1,6 +1,6 @@
 ---
 title: Assignment 0-0
-tags: Assingment0, Overthewire, bandit
+tags: assingment0 overthewire bandit wargame
 ---
 ## OverTheWire Bandit all clear
 
