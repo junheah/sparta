@@ -1,4 +1,7 @@
-# Assignment 0-0
+---
+title: Assignment 0-0
+tags: Assingment0, Overthewire, bandit
+---
 ## OverTheWire Bandit all clear
 
 <details> 
