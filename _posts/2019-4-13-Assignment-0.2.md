@@ -1,4 +1,7 @@
-# Assignment 0-2
+---
+title: Assignment 0-2
+tags: Assingment0, dalgona, bof
+---
 ## Buffer Overflow Foundation (Dalgona) ~p.27
 
 ### 0. 8086 Memory Architecture
