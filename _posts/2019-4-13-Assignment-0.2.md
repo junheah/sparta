@@ -5,6 +5,7 @@ tags: assingment0 dalgona bof
 ## Buffer Overflow Foundation (Dalgona) ~p.27
 
 ### 0. 8086 Memory Architecture
+
 ||
 |-|
 |<center><br><br><br>Available<br>Space<br><br><br></center>|
@@ -13,9 +14,11 @@ tags: assingment0 dalgona bof
 Upon system initialization, kernel is loaded to memory and usable memory is scanned.
 
 #### 0-0. Segment:
+
 When a process is started, operating system binds it to a 'segment' and puts it into memory.
 
 When segments are loaded into memory:
+
 ||
 |-|
 |<center>Segment 3</center>|
@@ -26,7 +29,6 @@ When segments are loaded into memory:
 ||
 ||
 |<center>Kernel</center>|
-
 
 Structure of a segment:
 
@@ -39,9 +41,11 @@ Structure of a segment:
 - code segment:
 	- contains instructions
 	- uses logical address : since the physical address is only known after execution
+
 > how to get physical address from segments:
 > 1. get offset from segment selector
 > 2. calculate physical address ( = offset + logical address )
+
 - data segment:
 	- contains data used for program execution
 	- splits into 4 data segments: data structure, data module, dynamic data, shared data
@@ -54,8 +58,11 @@ Structure of a segment:
 	- has a fixed size: decided upon creation
 
 ### 1. 8086 CPU Registers
+
 Memory located inside CPU, used for reading and saving instructions/data of a program
+
 #### 1-0. General-Purpose register
+
 - stores operand for arithmetic/logical operations, address calculation and memory pointers 
 - can be controlled by programmers
 - was called `AX,BX,CX,DX,...` in 16 bits, is now called `EAX,EBX,ECX,EDX,...` in 32 bits (E for Extended)
@@ -72,19 +79,23 @@ Memory located inside CPU, used for reading and saving instructions/data of a pr
 |EBP|points at a data inside SS register's stack segment|
 
 #### 1-1. Segment register
+
 stores the address of code/data/stack segment
+
 |Register|segment|
 |-|-|
 |CS|code|
 |DS,ES,FS,GS|data|
 |SS|stack|
+
 #### 1-2. Program status and control register
+
 - stores flags that are used to determine current program's condition
 - upon system reset : 0x00000002
 - 1, 3, 5, 15, 21-31 bits are reserved and cannot be controlled by software
 
-
 Status flags:
+
 |flag|Meaning|Condition|
 |-|-|-|
 |CF|Carry flag|when carry occurs
@@ -94,8 +105,10 @@ Status flags:
 |SF|Sign flag|MSB of result (positive:0, negative:1)
 |OF|Overflow flag|
 |DF|Direction flag|
+
 System flags:
-|flag|Meaning
+
+|flag|Meaning|
 |-|-|
 |IF|Interrupt enable flag|
 |TF|Trap flag|
@@ -109,12 +122,15 @@ System flags:
 |ID|Identification flag|
 
 #### 1-3. Instruction pointer
+
 - stores the address of next instruction
 - also stores addresses containing JMP, jcc, CALL , IRET instructions
 - cannot be accessed via software : only via control-transfer instructions
 
 ### 2. What happens to segment upon program execution?
+
 #### 2-0. example program
+
 ```c
 void function(int a,int b, int c){
 	char buffer1[15];
@@ -125,11 +141,13 @@ void main(){
 	function(1,2,3);
 }
 ```
+
 > compiling with option -S ouputs asm code
 
 Assembly code:
 
 < main >:
+
 ```nasm
 push ebp                  ;1.to save the previous function data 
 mov ebp, esp              ;2.first two lines are called "function prologue"
@@ -147,7 +165,9 @@ leave                     ;12.main function epilogue
 ret
 nop
 ```
+
 < function >:
+
 ```nasm
 push ebp                  ;8.function prologue
 mov ebp, esp
@@ -155,7 +175,9 @@ sub esp, 28h              ;9.extend stack by 40 bytes
 leave                     ;10.function epilogue
 ret
 ```
+
 step 9: why 40 bytes, not 25 bytes?
+
 >because stack uses 4bytes as unit (WORD)
 >> 15 bytes : 4 x 4 = 16 bytes
 >> 10 bytes : 4 x 3 = 12 bytes
@@ -165,19 +187,23 @@ step 9: why 40 bytes, not 25 bytes?
 >= 40 bytes
 
 function prologue:
+
 ```nasm
 push ebp
 mov ebp, esp
 ```
+
 function epilouge:
+
 ```nasm
 leave
 ret		;≒ pop eip
 ```
+
 leave:
+
 ```nasm
 ;does the reverse of function prologue
 mov esp, ebp
 pop ebp
 ```
-
