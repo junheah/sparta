@@ -6,10 +6,10 @@ tags: assingment0 dalgona bof
 
 ### 0. 8086 Memory Architecture
 
-||
-|-|
-|<center><br><br><br>Available<br>Space<br><br><br></center>|
-|<center>Kernel</center>|
+<table>
+      <tr><td><br><br>Available<br>Space<br><br><br></td></tr>
+      <tr><td>Kernel</td></tr>
+</table>
 
 Upon system initialization, kernel is loaded to memory and usable memory is scanned.
 
@@ -19,24 +19,23 @@ When a process is started, operating system binds it to a 'segment' and puts it 
 
 When segments are loaded into memory:
 
-||
-|-|
-|<center>Segment 3</center>|
-|<center>Available<br>Space</center>|
-|<center>Segment 2</center>|
-||
-|<center>Segment 1</center>|
-||
-||
-|<center>Kernel</center>|
+<table>
+      <tr><td>Segment 3</tr>
+	<tr><td>Available<br>Space</td></tr>
+	<tr><td>Segment 2</td></tr>
+	<tr><td></td></tr>
+	<tr><td>Segment 1</td></tr>
+	<tr><td></td></tr>
+      <tr><td>Kernel</td></tr>
+</table>
 
 Structure of a segment:
 
-||
-|-|
-|<center>Stack</center>|
-|<center>Data</center>|
-|<center>Code</center>|
+<table>
+      <tr><td>Stack</tr>
+	<tr><td>Data</td></tr>
+	<tr><td>Code</td></tr>
+</table>
 
 - code segment:
 	- contains instructions
