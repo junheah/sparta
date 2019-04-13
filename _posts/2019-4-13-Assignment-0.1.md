@@ -15,6 +15,7 @@ tags: assingment0 lazenca shellcode
 #### 1. Assembly code
 
 #### 1-0. Basic instructions:
+
 |Instruction (Intel)|Meaning|
 |--|--|
 |MOV dest, source|copy source to destination|
@@ -32,6 +33,7 @@ tags: assingment0 lazenca shellcode
 |LEA dest, source|load source address to destination|
 
 #### 1-1. INT 0x80 & SYSCALL
+
 ```nasm
 INT 0x80
 SYSCALL
