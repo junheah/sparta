@@ -20,8 +20,8 @@ When a process is started, operating system binds it to a 'segment' and puts it 
 When segments are loaded into memory:
 
 <table>
-      <tr><td>Segment 3</tr>
-	<tr><td>Available<br>Space</td></tr>
+	<tr><td>Segment 3</td></tr>
+	<tr><td>Available Space</td></tr>
 	<tr><td>Segment 2</td></tr>
 	<tr><td></td></tr>
 	<tr><td>Segment 1</td></tr>
