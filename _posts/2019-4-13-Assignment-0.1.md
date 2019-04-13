@@ -7,10 +7,11 @@ tags: assingment0 lazenca shellcode
 ### Shellcode
 
 #### 0. Basic knowledge
- - Attack where attackers opens "shell" to control target system
- - Is a small program written in machine code
- - is not completely executable: doesn't have to care about memory positioning
- - usually is written in high-level language and then converted to low-level language for execution 
+
+- Attack where attackers opens "shell" to control target system
+- Is a small program written in machine code
+- is not completely executable: doesn't have to care about memory positioning
+- usually is written in high-level language and then converted to low-level language for execution 
 
 #### 1. Assembly code
 
@@ -38,10 +39,12 @@ tags: assingment0 lazenca shellcode
 INT 0x80
 SYSCALL
 ```
+
 |Instruction| Meaning| Architecture|
 |--|--|--|
 |INT <operand 1>|Call to interrupt|x86, x86_64
 |SYSCALL|System call|x86_64|
+
 These two instructions are used to call system function
 - "INT 0x80" calls system function saved in EAX register
 - "SYSCALL"  calls system functions saved in RAX register
@@ -238,6 +241,7 @@ last:
 ## Return to Shellcode
 ### 0. Basic knowledge
 Definition: Overwriting the return address with shellcode address, leading it to be executed.
+
 |Instruction|What it does|
 |--|--|
 |CALL operation|PUSH return_address<br>JMP operation|
