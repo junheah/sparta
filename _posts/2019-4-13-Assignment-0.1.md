@@ -32,7 +32,7 @@ tags: assingment0 lazenca shellcode
 |LEA dest, source|load source address to destination|
 
 #### 1-1. INT 0x80 & SYSCALL
-```assembly
+```nasm
 INT 0x80
 SYSCALL
 ```
@@ -71,7 +71,7 @@ Arguments in system call:
 
 #### 1-3 Example
 32bit:
-```assembly
+```nasm
 section .data                           ; 데이터 세그먼트
     msg db  "Hello, world!",0x0a, 0x0d  ; 문자열과 새 줄 문자, 개행 문자 바이트
   
@@ -92,7 +92,7 @@ _start:
     int 0x80        ; 시스템 콜을 합니다.
 ```
 64bit:
-```assembly
+```nasm
 section .data                               ; 데이터 세그먼트
     msg db      "hello, world!",0x0a, 0x0d  ; 문자열과 새 줄 문자, 개행 문자 바이트
  
@@ -126,7 +126,7 @@ To change this code to shellcode format:
 Target string address has to be passed to write call, however without data-segment, MOV instruction cannot be used. To solve this problem, we have to make use of CALL and RET. When CALL is used, the address of the next instruction is pushed to the stack. We can pop this address and pass it to 'write'.
 
 Conversion result:
-```assembly
+```nasm
 BITS 32                         ; nasm에게 32비트 코드임을 알린다
   
 call helloworld                 ; 아래 mark_below의 명령을 call한다.
@@ -163,7 +163,7 @@ void main(){
 ```
 
 By building and executing, we can see that our shellcode has errors:
-```bash
+```shell
 lazenca0x0@ubuntu:~/ASM$ gcc -o shellcode -fno-stack-protector -z execstack --no-pie -m32 shellcode.c
 test.c:5:15: warning: array 'code' assumed to have one element
  unsigned char code[];
@@ -181,7 +181,7 @@ The error is caused by null-bytes inside shellcode.
 This can be solved by jumping to last function (which is after the helloworld function) and then calling helloworld. This removes the null byte because the relative address of helloworld becomes negative.
 
 solution:
-```assembly
+```nasm
 BITS 32         ; nasm에게 32비트 코드임을 알린다
  
 jmp short last  ; 맨 끝으로 점프한다.
@@ -208,7 +208,7 @@ last:
 This is caused by register being larger than input. Which causes the register to keep the value before MOV. This can be solved by initializing the register with 0 beforehand.
 
 solution:
-```assembly
+```nasm
 BITS 32         ; nasm에게 32비트 코드임을 알린다
  
 jmp short last  ; 맨 끝으로 점프한다.
