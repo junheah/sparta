@@ -1,5 +1,5 @@
 ---
-title: Assignment 0-0
+title: 0-0 OTW Bandit
 tags: assingment0 overthewire bandit wargame
 ---
 ## OverTheWire Bandit all clear
