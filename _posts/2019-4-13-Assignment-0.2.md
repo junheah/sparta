@@ -7,8 +7,8 @@ tags: assingment0 dalgona bof
 ### 0. 8086 Memory Architecture
 
 <table>
-      <tr><td><br><br>Available<br>Space<br><br><br></td></tr>
-      <tr><td>Kernel</td></tr>
+	<tr><td><br><br>Available<br>Space<br><br><br></td></tr>
+	<tr><td>Kernel</td></tr>
 </table>
 
 Upon system initialization, kernel is loaded to memory and usable memory is scanned.
@@ -26,13 +26,13 @@ When segments are loaded into memory:
 	<tr><td></td></tr>
 	<tr><td>Segment 1</td></tr>
 	<tr><td></td></tr>
-      <tr><td>Kernel</td></tr>
+      	<tr><td>Kernel</td></tr>
 </table>
 
 Structure of a segment:
 
 <table>
-      <tr><td>Stack</tr>
+	<tr><td>Stack</td></tr>
 	<tr><td>Data</td></tr>
 	<tr><td>Code</td></tr>
 </table>
