@@ -3,13 +3,17 @@ title: Assignment 0-1
 tags: assingment0 lazenca shellcode
 ---
 ## The basics technics of Shellcode
+
 ### Shellcode
+
 #### 0. Basic knowledge
  - Attack where attackers opens "shell" to control target system
  - Is a small program written in machine code
  - is not completely executable: doesn't have to care about memory positioning
  - usually is written in high-level language and then converted to low-level language for execution 
+
 #### 1. Assembly code
+
 #### 1-0. Basic instructions:
 |Instruction (Intel)|Meaning|
 |--|--|
