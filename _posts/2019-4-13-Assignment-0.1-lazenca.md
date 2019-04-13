@@ -1,5 +1,5 @@
 ---
-title: Assignment 0-1
+title: 0-1 lazenca notes
 tags: assingment0 lazenca shellcode
 ---
 ## The basics technics of Shellcode
