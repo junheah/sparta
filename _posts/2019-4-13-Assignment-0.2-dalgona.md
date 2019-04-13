@@ -1,5 +1,5 @@
 ---
-title: Assignment 0-2
+title: 0-2 Dalgona notes
 tags: assingment0 dalgona bof
 ---
 ## Buffer Overflow Foundation (Dalgona) ~p.27
