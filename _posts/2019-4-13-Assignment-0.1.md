@@ -1,6 +1,6 @@
 ---
 title: Assignment 0-1
-tags: Assingment0, lazenca, shellcode
+tags: assingment0 lazenca shellcode
 ---
 ## The basics technics of Shellcode
 ### Shellcode
