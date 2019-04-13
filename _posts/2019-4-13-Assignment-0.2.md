@@ -130,7 +130,7 @@ void main(){
 Assembly code:
 
 < main >:
-```assembly
+```nasm
 push ebp                  ;1.to save the previous function data 
 mov ebp, esp              ;2.first two lines are called "function prologue"
 sub esp, 8h               ;3.extend stack by 8 bytes
@@ -148,7 +148,7 @@ ret
 nop
 ```
 < function >:
-```assembly
+```nasm
 push ebp                  ;8.function prologue
 mov ebp, esp
 sub esp, 28h              ;9.extend stack by 40 bytes
@@ -165,17 +165,17 @@ step 9: why 40 bytes, not 25 bytes?
 >= 40 bytes
 
 function prologue:
-```assembly
+```nasm
 push ebp
 mov ebp, esp
 ```
 function epilouge:
-```assembly
+```nasm
 leave
 ret		;≒ pop eip
 ```
 leave:
-```assembly
+```nasm
 ;does the reverse of function prologue
 mov esp, ebp
 pop ebp
