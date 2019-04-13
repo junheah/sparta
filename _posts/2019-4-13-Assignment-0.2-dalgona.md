@@ -178,8 +178,8 @@ ret
 step 9: why 40 bytes, not 25 bytes?
 
 >because stack uses 4bytes as unit (WORD)
->> 15 bytes : 4 x 4 = 16 bytes
->> 10 bytes : 4 x 3 = 12 bytes
+>> 15 bytes : 4 x 4 = 16 bytes  
+>> 10 bytes : 4 x 3 = 12 bytes  
 >> = 28 bytes
 >
 >+offset caused by gcc version (gcc 2.96+ uses 16 bytes as unit)
