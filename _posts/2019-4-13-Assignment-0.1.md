@@ -176,7 +176,7 @@ lazenca0x0@ubuntu:~/ASM$
 
 The error is caused by null-bytes inside shellcode.
 
-1. First null-byte is from CALL instruction:
+1.First null-byte is from CALL instruction:
 
 This can be solved by jumping to last function (which is after the helloworld function) and then calling helloworld. This removes the null byte because the relative address of helloworld becomes negative.
 
@@ -203,7 +203,7 @@ last:
     db "Hello, world!", 0x0a, 0x0d  ; 새 줄 바이트와 개행 문자 바이트
 ```
 
-2. Other null bytes are from MOV instructions:
+2.Other null bytes are from MOV instructions:
 
 This is caused by register being larger than input. Which causes the register to keep the value before MOV. This can be solved by initializing the register with 0 beforehand.
 
