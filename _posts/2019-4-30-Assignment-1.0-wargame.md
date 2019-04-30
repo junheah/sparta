@@ -166,7 +166,7 @@ Then it goes through environment values and overwrites them with zero using mems
    0x08048587 <+135>:	mov    eax,DWORD PTR [ebp+0xc]	;address of argv array (eax = argv[0])
    0x0804858a <+138>:	add    eax,0x4			;second item of argv array (eax = argv[1])
    0x0804858d <+141>:	mov    edx,DWORD PTR [eax]	;pointer of argv[1] value (edx = *argv[1])
-   0x0804858f <+143>:	add    edx,0x2f			;0x2f th char of argv[1] value (edx = *argv[1][0x2f])
+   0x0804858f <+143>:	add    edx,0x2f			;0x2f th char of argv[1] value (edx = &argv[1][0x2f])
    0x08048592 <+146>:	cmp    BYTE PTR [edx],0xff
    0x08048595 <+149>:	je     0x80485b0 <main+176>
 ```
