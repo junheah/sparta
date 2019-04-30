@@ -4,13 +4,13 @@ tags: assignment1 wargame bof lob lv0 lv1 lv2 lv3
 ---
 
 ## 0. lv0 > lv1
-```
+```bash
 -rwsr-sr-x 1 lv1 lv1 11987 Feb 25  2010 lv1
 ```
 binary "lv1" allows the user to use the permission of user:lv1 upon execution. Let's disassemble this binary
 
 ```nasm
-   0x08048439 <+9>:	cmp    DWORD PTR [ebp+0x8],0x1
+   0x08048439 <+9>:	cmp    DWORD PTR [ebp+0x8], 0x1
    0x0804843d <+13>:	jg     0x8048456 <main+38>
 ```
 first, the program checks if argc is 1 and exits the program if true.
@@ -125,7 +125,7 @@ i dont like stdin
 -rwsr-sr-x 1 lv4  lv4  12567 Apr 26 13:17 lv4
 ```
 Same permissions. Disassembly time:
-```masm
+```nasm
    0x08048506 <+6>:	cmp    DWORD PTR [ebp+0x8],0x1
    0x0804850a <+10>:	jg     0x8048523 <main+35>
 ```
