@@ -1,10 +1,10 @@
 ---
 title: 0-0 OTW Bandit
-tags: assingment0 overthewire bandit wargame
+tags: assignment0 overthewire bandit wargame
 ---
 ## OverTheWire Bandit all clear
 
-<details> 
+<details>
   <summary>passwords </summary>
   3 : UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK<br>
   4 : pIwrPrtPN36QITSp3EQaw936yaFoFgAB<br>

@@ -1,6 +1,6 @@
 ---
 title: 0-2 Dalgona notes
-tags: assingment0 dalgona bof
+tags: assignment0 dalgona bof
 ---
 ## Buffer Overflow Foundation (Dalgona) ~p.27
 
@@ -62,7 +62,7 @@ Memory located inside CPU, used for reading and saving instructions/data of a pr
 
 #### 1-0. General-Purpose register
 
-- stores operand for arithmetic/logical operations, address calculation and memory pointers 
+- stores operand for arithmetic/logical operations, address calculation and memory pointers
 - can be controlled by programmers
 - was called `AX,BX,CX,DX,...` in 16 bits, is now called `EAX,EBX,ECX,EDX,...` in 32 bits (E for Extended)
 
@@ -148,7 +148,7 @@ Assembly code:
 < main >:
 
 ```nasm
-push ebp                  ;1.to save the previous function data 
+push ebp                  ;1.to save the previous function data
 mov ebp, esp              ;2.first two lines are called "function prologue"
 sub esp, 8h               ;3.extend stack by 8 bytes
 and esp, fffffff0h        ;4.sets last 4 bits of esp to 0

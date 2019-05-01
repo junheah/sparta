@@ -1,6 +1,6 @@
 ---
 title: 0-1 Lazenca.net notes
-tags: assingment0 lazenca shellcode
+tags: assignment0 lazenca shellcode
 ---
 ## The basics technics of Shellcode
 
@@ -11,7 +11,7 @@ tags: assingment0 lazenca shellcode
 - Attack where attackers opens "shell" to control target system
 - Is a small program written in machine code
 - is not completely executable: doesn't have to care about memory positioning
-- usually is written in high-level language and then converted to low-level language for execution 
+- usually is written in high-level language and then converted to low-level language for execution
 
 #### 1. Assembly code
 
@@ -79,10 +79,10 @@ Arguments in system call:
 ```nasm
 section .data                           ; 데이터 세그먼트
     msg db  "Hello, world!",0x0a, 0x0d  ; 문자열과 새 줄 문자, 개행 문자 바이트
-  
+
 section .text                           ; 텍스트 세그먼트
     global  _start                      ; ELF 링킹을 위한 초기 엔트리 포인트
-  
+
 _start:
     ; SYSCALL: write(1,msg,14)
     mov eax, 4      ; 쓰기 시스템 콜의 번호 '4' 를 eax 에 저장합니다.
@@ -90,7 +90,7 @@ _start:
     mov ecx, msg    ; 문자열 주소를 ecx에 저장니다.
     mov edx, 14     ; 문자열의 길이 '14'를 edx에 저장합니다.
     int 0x80        ; 시스템 콜을 합니다.
-  
+
     ; SYSCALL: exit(0)
     mov eax, 1      ; exit 시스템 콜의 번호 '1'을 eax 에 저장합니다.
     mov ebx, 0      ; 정상 종료를 의미하는 '0'을 ebx에 저장 합니다.
@@ -100,10 +100,10 @@ _start:
 ```nasm
 section .data                               ; 데이터 세그먼트
     msg db      "hello, world!",0x0a, 0x0d  ; 문자열과 새 줄 문자, 개행 문자 바이트
- 
+
 section .text                               ; 텍스트 세그먼트
     global _start                           ; ELF 링킹을 위한 초기 엔트리 포인트
- 
+
 _start:
     ; SYSCALL: write(1,msg,14)
     mov     rax, 1      ; 쓰기 시스템 콜의 번호 '1' 를 rax 에 저장합니다.
@@ -111,7 +111,7 @@ _start:
     mov     rsi, msg    ; 문자열 주소를 rsi에 저장니다.
     mov     rdx, 14     ; 문자열의 길이 '14'를 rdx에 저장합니다.
     syscall             ; 시스템 콜을 합니다.
- 
+
     ; SYSCALL: exit(0)
     mov    rax, 60      ; exit 시스템 콜의 번호 '60'을 eax 에 저장합니다.
     mov    rdi, 0       ; 정상 종료를 의미하는 '0'을 ebx에 저장 합니다.
@@ -121,22 +121,22 @@ _start:
 #### 1-4 Change to shellcode format
 The example code above is not shellcode for following reasons:
 - doesn't fully function as a standalone
-- requires linking process 
+- requires linking process
 
 To change this code to shellcode format:
 - remove 'text' and 'data' segments
 - use 'call' instruction to call helloworld function
-- save target string (string used in 'write' function) after the call. 
+- save target string (string used in 'write' function) after the call.
 
 Target string address has to be passed to write call, however without data-segment, MOV instruction cannot be used. To solve this problem, we have to make use of CALL and RET. When CALL is used, the address of the next instruction is pushed to the stack. We can pop this address and pass it to 'write'.
 
 Conversion result:
 ```nasm
 BITS 32                         ; nasm에게 32비트 코드임을 알린다
-  
+
 call helloworld                 ; 아래 mark_below의 명령을 call한다.
 db "Hello, world!", 0x0a, 0x0d  ; 새 줄 바이트와 개행 문자 바이트
-  
+
 helloworld:
     ; ssize_t write(int fd, const void *buf, size_t count);
     pop ecx         ; 리턴 주소를 팝해서 exc에 저장합니다.
@@ -144,7 +144,7 @@ helloworld:
     mov ebx, 1      ; STDOUT 파일 서술자
     mov edx, 15     ; 문자열 길이
     int 0x80        ; 시스템 콜: write(1,string, 14)
-  
+
     ; void _exit(int status);
     mov eax,1       ;exit 시스템 콜 번호
     mov ebx,0       ;Status = 0
@@ -155,10 +155,10 @@ We can use this code for testing shellcode:
 ```c
 #include<stdio.h>
 #include<string.h>
- 
+
 unsigned char shellcode [] = "SHELLL CODE";
 unsigned char code[];
- 
+
 void main(){
     int len = strlen(shellcode);
     printf("Shellcode len : %d\n",len);
@@ -188,7 +188,7 @@ This can be solved by jumping to last function (which is after the helloworld fu
 solution:
 ```nasm
 BITS 32         ; nasm에게 32비트 코드임을 알린다
- 
+
 jmp short last  ; 맨 끝으로 점프한다.
 helloworld:
     ; ssize_t write(int fd, const void *buf, size_t count);
@@ -197,12 +197,12 @@ helloworld:
     mov ebx, 1  ; STDOUT 파일 서술자
     mov edx, 15 ; 문자열 길지
     int 0x80    ; 시스템 콜: write(1,string, 14)
- 
+
     ; void _exit(int status);
     mov eax,1   ;exit 시스템 콜 번호
     mov ebx,0   ;Status = 0
     int 0x80    ;시스템 콜: exit(0)
-  
+
 last:
     call helloworld ; 널 바이트를 해결하기 위해 위로 돌아간다.
     db "Hello, world!", 0x0a, 0x0d  ; 새 줄 바이트와 개행 문자 바이트
@@ -215,7 +215,7 @@ This is caused by register being larger than input. Which causes the register to
 solution:
 ```nasm
 BITS 32         ; nasm에게 32비트 코드임을 알린다
- 
+
 jmp short last  ; 맨 끝으로 점프한다.
 helloworld:
     ; ssize_t write(int fd, const void *buf, size_t count);
@@ -227,12 +227,12 @@ helloworld:
     xor edx,edx ; edx 레지스터의 값을 0으로 초기화합니다.
     mov dl, 15  ; 문자열 길지
     int 0x80    ; 시스템 콜: write(1,string, 14)
- 
+
     ; void _exit(int status);
     mov al,1    ;exit 시스템 콜 번호
     xor ebx,ebx ;Status = 0
     int 0x80    ;시스템 콜: exit(0)
-  
+
 last:
     call helloworld ; 널 바이트를 해결하기 위해 위로 돌아간다.
     db "Hello, world!", 0x0a, 0x0d  ; 새 줄 바이트와 개행 문자 바이트
@@ -256,13 +256,13 @@ Thus, by changing the return address, we can change the program flow.
 ```c
 #include <stdio.h>
 #include <unistd.h>
- 
+
 void vuln(){
     char buf[50];
     printf("buf[50] address : %p\n",buf);
     read(0, buf, 100);
 }
- 
+
 void main(){
     vuln();
 }
