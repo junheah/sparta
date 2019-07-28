@@ -1,3 +1,7 @@
+---
+title: Pwnable.xyz Writeup [50 points]
+tags: assignment3 wargame ctf writeup pwnable pwnable.xyz
+---
 ## 1. Welcome
 ```bash
 gdb-peda$ disas main
