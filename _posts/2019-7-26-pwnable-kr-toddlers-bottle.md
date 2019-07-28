@@ -92,7 +92,7 @@ col@ubuntu:~$ ./col `python -c "print '\x11\x11\x11\x01'*4 + '\xa8\xc5\x98\x1d'"
 daddy! I just managed to create a hash collision :)
 ```
 
-# 2. bof
+## 2. bof
 
 bof.c
 ```c
