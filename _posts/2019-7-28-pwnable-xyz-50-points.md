@@ -559,6 +559,7 @@ https://umbum.tistory.com/102
 
 ## 7. Two Targets
 ```nasm
+...
 0x0000000000400b3b <+55>:    call   0x4009af <read_int32>
 0x0000000000400b40 <+60>:    mov    DWORD PTR [rbp-0x44],eax
 0x0000000000400b43 <+63>:    mov    eax,DWORD PTR [rbp-0x44]
@@ -574,9 +575,11 @@ https://umbum.tistory.com/102
 0x0000000000400b5f <+91>:    cmp    eax,0x4
 0x0000000000400b62 <+94>:    je     0x400bf5 <main+241>
 0x0000000000400b68 <+100>:   jmp    0x400c0c <main+264>
+...
 ```
 The main function reads input from user and jumps to inputted menu.
 ```
+...
 <1> change name
 0x0000000000400b6d <+105>:   lea    rdi,[rip+0x11d5]        # 0x401d49 "name: "
 0x0000000000400b74 <+112>:   mov    eax,0x0
@@ -619,9 +622,11 @@ The main function reads input from user and jumps to inputted menu.
 0x0000000000400c03 <+255>:   je     0x400c1a <main+278>
 0x0000000000400c05 <+257>:   call   0x40099c <win>
 0x0000000000400c0a <+262>:   jmp    0x400c1a <main+278>
+...
 ```
 ``auth`` function in ``get shell`` checks the previously inputted ``name`` value.
 ```nasm
+...
 0x0000000000400a6a <+68>:    mov    rdx,QWORD PTR [rbp-0x48] ;name
 0x0000000000400a6e <+72>:    mov    eax,DWORD PTR [rbp-0x38] ;i
 0x0000000000400a71 <+75>:    cdqe
@@ -650,6 +655,7 @@ The main function reads input from user and jumps to inputted menu.
 0x0000000000400ab9 <+147>:   mov    eax,DWORD PTR [rbp-0x38] ;i
 0x0000000000400abc <+150>:   cmp    eax,0x1f
 0x0000000000400abf <+153>:   jbe    0x400a6a <auth+68>
+...
 ```
 I implemented the encoding process in python:
 ```python
@@ -664,17 +670,22 @@ for i in range(0, 32):
 ```
 ``auth`` goes through this encoding process and compares it with 0x401d28
 ```nasm
+...
 0x0000000000400ac1 <+155>:   lea    rax,[rbp-0x30]
 0x0000000000400ac5 <+159>:   mov    edx,0x20
 0x0000000000400aca <+164>:   lea    rsi,[rip+0x1257]        # 0x401d28
 0x0000000000400ad1 <+171>:   mov    rdi,rax
 0x0000000000400ad4 <+174>:   call   0x400770 <strncmp@plt>
+...
 ```
 By reversing the encoding process, I was able to get the correct input.
 
 exploit code:
 ```python
 from pwn import *
+
+main = [0x55,0x48,0x89,0xe5,0x48,0x83,0xec,0x50,0x64,0x48,0x8b,0x04,0x25,0x28,0x00,0x00,0x00,0x48,0x89,0x45,0xf8,0x31,0xc0,0xe8,0x24,0xfe,0xff,0xff,0x48,0x8d,0x45,0xc0]
+target = [0x11,0xde,0xcf,0x10,0xdf,0x75,0xbb,0xa5,0x43,0x1e,0x9d,0xc2,0xe3,0xbf,0xf5,0xd6,0x96,0x7f,0xbe,0xb0,0xbf,0xb7,0x96,0x1d,0xa8,0xbb,0x0a,0xd9,0xbf,0xc9,0x0d,0xff]
 
 #decode
 newname = ''
