@@ -453,7 +453,7 @@ FLAG{useless_if_u_cant_print_the_note}desc: FLAG{useless_if_u_cant_print_the_not
 $  
 ```
 
-## 6. xor
+## 6. Xor
 ```nasm
 Dump of assembler code for function main:
    0x0000000008000a34 <+0>:     push   rbp
