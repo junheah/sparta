@@ -5,7 +5,7 @@ tags: ctf writeup baby igrus super-child child
 ## 0. baby
 ### 0-0. Scenario
 Since the ``flag`` function has both ``system`` and '/bin/sh' string, theres not much to do here.
- 
+
 1. find pop rdi gadget
 2. call system('/bin/sh')
 
@@ -183,3 +183,5 @@ p.sendline(payload)
 
 p.interactive()
 ```
+
+## 3. database
