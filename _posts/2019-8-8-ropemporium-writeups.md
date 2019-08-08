@@ -136,7 +136,7 @@ ROPE{a_placeholder_32byte_flag!}
 ```
 
 ## 2. callme
-```
+```bash
 gdb-peda$ checksec
 CANARY    : disabled
 FORTIFY   : disabled
@@ -172,7 +172,7 @@ End of assembler dump.
 ```
 pwnme+62~74를 보면 bof에 취약함을 알 수 있다.
 
-nxbit가 활성화 되어있으므로 rop를 통해 암호화된 플래그를 복호화 하면 되는듯 하다.
+암호화된 플래그를 복호화 하면 되는듯 하다.
 
 pwnme 외에도, 사용되지는 않지만 봐야할 함수들이 몇가지 있다:
 ```
@@ -195,11 +195,11 @@ Dump of assembler code for function usefulGadgets:
    0x0000000000401abe <+14>:    xchg   ax,ax
 End of assembler dump.
 ```
-callme_one~three는 각각 파라미터를 1,2,3과 비교하고, 틀릴시 파라미터가 틀렸다는 메시지를 출력한다.
+callme_one~three는 각 파라미터를 1,2,3과 비교하고, 틀릴시 메시지를 출력한다.
 
 이 세 함수의 역할은 순서대로 실행했을때, encrypted_flag를 복호화 해주는 것이라 예상했다.
 
-three에는 함수 에필로그 대신 exit@plt가 있기에 이 함수를 마지막 순서로 두고 버퍼를 설계했다.
+three에는 함수 에필로그 대신 exit@plt가 있기에 이 함수를 마지막 순서로 정했다.
 
 <table>
 	<tr><td>dummy data : (0x28 bytes)</td></tr>
@@ -470,9 +470,9 @@ Dump of assembler code for function usefulGadgets:
    0x0000000000400b4f <+31>:    nop
 End of assembler dump.
 ```
-usefulFunction을 이러한 가젯들을 이용해서 flag를 leak 하도록 바꾸는 것이 목표인것 같다.
+이 gadget들을 이용해서 flag를 leak 하도록 바꾸는 것이 목표인것 같다.
 
-쓰기 가능한 공간을 찾아서 mov 해주는 gadget으로 "/bin/sh"를 저장하고, 이를 system에 넣으면 flag를 얻을 수 있을 것이다.
+쓰기 가능한 공간을 찾아서, mov로 "/bin/sh"를 저장하고, 이를 system에 넣으면 flag를 얻을 수 있을 것이다.
 
 ```bash
 gdb-peda$ vmmap
@@ -482,9 +482,9 @@ Start              End                Perm      Name
 0x00601000         0x00602000         rw-p      /home/junheah/ropemp/badchars/badchars
 ...
 ````
-0x601000로 정했다.
+저장 위치는 0x601000로 정했다.
 
-하지만 직접 "/bin/sh"를 입력하는것은 불가능하기 때문에, xor 연산하여 입력한 후, 다시 xor로 복호화 했다.
+직접 "/bin/sh"를 입력하는것은 불가능하기 때문에, xor 연산하여 입력한 후, 다시 xor로 복호화 했다.
 
 exploit.py:
 ```python
@@ -569,11 +569,8 @@ Dump of assembler code for function pwnme:
    0x0000000000400806 <+81>:    ret
 End of assembler dump.
 ```
-pwmme는 bof에 취약하다.
+pwmme는 bof에 취약하다. 이 바이너리도 "/bin/sh" 같은 문자열이 없다.
 
-libc 주소를 leak 하는 방법도 있지만, 여러 가젯을 사용하는게 문제의 출제 의도인듯 하니, 그 방향으로 해보자.
-
-가젯들:
 ```
 Start              End                Perm      Name
 0x00400000         0x00401000         r-xp      /home/junheah/ropemp/fluff/fluff
@@ -612,7 +609,7 @@ d : <[r10] = r11>
    ...
 End of assembler dump.
 ```
-questionableGadgets의 가젯들을 사용해 보자. pwnme 함수가 끝나고 r12의 값만 알면 쉽게 할수 있을 것 같다.
+questionableGadgets의 가젯들을 사용해 보자. pwnme에서 ret 할때의 r12 값만 알면 쉽게 할수 있을 것 같다.
 
 ``pwnme 함수 에필로그에서 r12의 값 : 0x400650``
 
@@ -771,7 +768,7 @@ Non-debugging symbols:
 0x0000000000000abe  ret2win
 0x0000000000000ad8  _fini
 ```
-ret2win으로 리턴하면 될것 같다.
+ret2win으로 리턴하면 된다.
 ```bash
 gdb-peda$ elfsymbol
 Found 10 symbols
