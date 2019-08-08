@@ -481,7 +481,8 @@ Start              End                Perm      Name
 0x00600000         0x00601000         r--p      /home/junheah/ropemp/badchars/badchars
 0x00601000         0x00602000         rw-p      /home/junheah/ropemp/badchars/badchars
 ...
-0x601000에 저장하기로 하였다.
+````
+0x601000로 정했다.
 
 하지만 직접 "/bin/sh"를 입력하는것은 불가능하기 때문에, xor 연산하여 입력한 후, 다시 xor로 복호화 했다.
 
